@@ -71,7 +71,9 @@ const evaluate = {
    * @return {String}
    */
   async getPageAfterSubmit(page) {
-    const evaluate = async() => await page.evaluate(() => Object.keys(_sharedData.entry_data)[0])
+    const evaluate = async() => await page.evaluate(() => {
+      return (_sharedData in window) ? Object.keys(_sharedData.entry_data)[0] : 'LoginAndSignupPage'
+    })
     return await evaluateWithTimeout(evaluate, (value) => value !== 'LoginAndSignupPage')
   },
 
@@ -84,7 +86,7 @@ const evaluate = {
     const evaluate = async() => await page.evaluate(() => {
       const pre  = document.querySelector('body > pre')
       const body = pre && pre.innerHTML
-      var json = false
+      var json   = false
       try {
         json = JSON.parse(body)
       } catch (err) {}
