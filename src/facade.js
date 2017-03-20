@@ -53,7 +53,6 @@ const facade = async({username, password, tag}) => {
   // Open explore tag page
   logger('Open explore tag page...')
   const statusExploreTagPage = await evaluate.openTagPage(page, tag)
-  console.log('statusExploreTagPage', statusExploreTagPage)
   if (statusExploreTagPage !== 'success') {
     throw new Error(`Can not open explore tags page`)
   }
@@ -66,7 +65,6 @@ const facade = async({username, password, tag}) => {
     throw new Error(`Can not fetch json object from explore tags page`)
   }
   logger('Successfull fetched data %j', json)
-
 
   // exit phantom instance
   await instance.exit();

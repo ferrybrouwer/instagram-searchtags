@@ -84,10 +84,13 @@ const evaluate = {
     const evaluate = async() => await page.evaluate(() => {
       const pre  = document.querySelector('body > pre')
       const body = pre && pre.innerHTML
-      let json   = false
-      try { json = JSON.parse(body) } catch (err) {}
+      var json = false
+      try {
+        json = JSON.parse(body)
+      } catch (err) {}
       return json
     })
+
     return await evaluateWithTimeout(evaluate, (value) => typeof value === 'object')
   }
 }

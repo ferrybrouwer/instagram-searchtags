@@ -1,4 +1,11 @@
 {
-  "presets": ["es2015", "stage-0"],
+  "presets": [
+    "es2016",
+    "node6"
+  ],
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-es2015-arrow-functions"
+  ],
   "sourceMaps": "inline"
 }
