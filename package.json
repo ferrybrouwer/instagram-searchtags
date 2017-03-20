@@ -1,6 +1,6 @@
 {
   "name": "instagram-searchtags",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Instagram scraper searching tags",
   "main": "dist/index.js",
   "scripts": {
@@ -20,6 +20,10 @@
     "debug": "^2.6.3",
     "phantom": "^4.0.1",
     "phantomjs-prebuilt": "^2.1.14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ferrybrouwer/instagram-searchtags"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
