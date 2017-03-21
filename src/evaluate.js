@@ -17,12 +17,17 @@ const evaluate = {
   /**
    * Open tag page
    *
-   * @param   {Object}  page
-   * @param   {String}  tag
+   * @param   {Object}        page
+   * @param   {String}        tag
+   * @param   {String|null}   maxId
    * @return  {String} `success` or `failed`
    */
-  async openTagPage(page, tag) {
-    const evaluate = async() => await page.open(`https://www.instagram.com/explore/tags/${tag}/?__a=1`)
+  async openTagPage(page, tag, maxId = null) {
+    let url = `https://www.instagram.com/explore/tags/${tag}/?__a=1`
+    if (typeof maxId === 'string' && maxId.length > 0) {
+      url += `&maxId=${maxId}`
+    }
+    const evaluate = async() => await page.open(url)
     return await evaluateWithTimeout(evaluate, (value) => (value === 'success'))
   },
 
@@ -87,7 +92,7 @@ const evaluate = {
     const evaluate = async() => await page.evaluate(() => {
       const pre  = document.querySelector('body > pre')
       const body = pre && pre.innerHTML
-      var json = false
+      var json   = false
       try {
         json = JSON.parse(body)
       } catch (err) {}

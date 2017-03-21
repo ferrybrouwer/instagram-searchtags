@@ -1,6 +1,6 @@
 {
   "name": "instagram-searchtags",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "Instagram scraper searching tags",
   "main": "dist/index.js",
   "scripts": {
@@ -28,6 +28,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.0",
     "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.23.0",
     "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
     "babel-preset-es2016": "^6.22.0",
     "babel-preset-node6": "^11.0.0"

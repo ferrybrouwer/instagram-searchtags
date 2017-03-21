@@ -1,1 +1,1 @@
-module.exports = require('./facade')
+module.exports = require('./searchtags/App').default
