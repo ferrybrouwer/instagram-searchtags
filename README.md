@@ -141,10 +141,10 @@ media tags, example:
         const catTag = searchTags.createTag('cat')
 
         // fetch 5 dog nodes from explore tag page
-        const dogNodes = await searchTags.fetchNodes(5)
+        const dogNodes = await dogTag.fetchNodes(5)
 
         // fetch 20 cat nodes from explore tag page
-        const catNodes = await searchTags.fetchNodes(20)
+        const catNodes = await catTag.fetchNodes(20)
 
         // output all display images with a caption to body
         dogNodes.concat(catNodes).forEach((node) => {
