@@ -1,8 +1,8 @@
 import phantom from 'phantom'
 import debug from 'debug'
 import Tag from './Tag'
-import createPage from './createPage'
-import evaluate from '../evaluate'
+import {createPhantomPage} from './helpers'
+import evaluate from './evaluate'
 
 // default phantom settings
 phantom.cookiesEnabled    = true
@@ -39,7 +39,7 @@ export default class App {
     this._phantomInstance = await phantom.create()
 
     // create page
-    const page = await createPage(this._phantomInstance)
+    const page = await createPhantomPage(this._phantomInstance)
 
     // open login page
     logger('Open login page...')

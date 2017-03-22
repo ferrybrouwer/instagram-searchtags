@@ -16,11 +16,9 @@ var _Tag = require('./Tag');
 
 var _Tag2 = _interopRequireDefault(_Tag);
 
-var _createPage = require('./createPage');
+var _helpers = require('./helpers');
 
-var _createPage2 = _interopRequireDefault(_createPage);
-
-var _evaluate = require('../evaluate');
+var _evaluate = require('./evaluate');
 
 var _evaluate2 = _interopRequireDefault(_evaluate);
 
@@ -67,7 +65,7 @@ class App {
       _this._phantomInstance = yield _phantom2.default.create();
 
       // create page
-      const page = yield (0, _createPage2.default)(_this._phantomInstance);
+      const page = yield (0, _helpers.createPhantomPage)(_this._phantomInstance);
 
       // open login page
       logger('Open login page...');

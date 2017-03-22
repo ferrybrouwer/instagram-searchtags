@@ -74,7 +74,7 @@ class FetchedNodes {
    *
    * @return {Number}
    */
-  getCount() {
+  getTotalCount() {
     return this.media.count;
   }
 }

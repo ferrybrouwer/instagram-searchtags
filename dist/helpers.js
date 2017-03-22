@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -30,6 +30,29 @@ let evaluateWithTimeout = exports.evaluateWithTimeout = function () {
 
   return function evaluateWithTimeout(_x, _x2) {
     return _ref.apply(this, arguments);
+  };
+}();
+
+/**
+ * Create page from Phantom instance with default settings
+ *
+ * @param   {Phantom} instance
+ * @return  {Promise.<Page>}
+ */
+
+
+let createPhantomPage = exports.createPhantomPage = function () {
+  var _ref2 = _asyncToGenerator(function* (instance) {
+    const page = yield instance.createPage();
+    page.setting('userAgent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36');
+    page.setting('javascriptEnabled', true);
+    page.setting('loadImages', false);
+
+    return page;
+  });
+
+  return function createPhantomPage(_x3) {
+    return _ref2.apply(this, arguments);
   };
 }();
 

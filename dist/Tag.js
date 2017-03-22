@@ -4,21 +4,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createPage = require('./createPage');
-
-var _createPage2 = _interopRequireDefault(_createPage);
-
-var _evaluate = require('../evaluate');
-
-var _evaluate2 = _interopRequireDefault(_evaluate);
-
-var _FetchedNodes = require('./FetchedNodes');
-
-var _FetchedNodes2 = _interopRequireDefault(_FetchedNodes);
-
 var _debug = require('debug');
 
 var _debug2 = _interopRequireDefault(_debug);
+
+var _helpers = require('./helpers');
+
+var _evaluate = require('./evaluate');
+
+var _evaluate2 = _interopRequireDefault(_evaluate);
+
+var _Page = require('./Page');
+
+var _Page2 = _interopRequireDefault(_Page);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -55,7 +53,7 @@ class Tag {
 
 
   /**
-   * @type {FetchedNodes}
+   * @type {Page}
    */
 
 
@@ -87,7 +85,7 @@ class Tag {
    *
    * @param   {String} maxId
    * @throws  {Error}
-   * @return  {FetchedNodes}
+   * @return  {Page}
    */
   fetchPage(maxId = null) {
     var _this2 = this;
@@ -95,7 +93,7 @@ class Tag {
     return _asyncToGenerator(function* () {
 
       // create page
-      const page = yield (0, _createPage2.default)(_this2.instance);
+      const page = yield (0, _helpers.createPhantomPage)(_this2.instance);
 
       // open explore tag page
       const openPageStatus = yield _evaluate2.default.openTagPage(page, _this2.tag, maxId);
@@ -110,7 +108,7 @@ class Tag {
       }
 
       // store current fetched object
-      _this2.fetchedObject = new _FetchedNodes2.default(json);
+      _this2.fetchedObject = new _Page2.default(json);
 
       return _this2.fetchedObject;
     })();

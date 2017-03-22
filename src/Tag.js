@@ -1,7 +1,7 @@
-import createPage from './createPage'
-import evaluate from '../evaluate'
-import FetchedNodes from './FetchedNodes'
 import debug from 'debug'
+import {createPhantomPage} from './helpers'
+import evaluate from './evaluate'
+import Page from './Page'
 
 const logger = debug('instagramsearchtags')
 
@@ -19,7 +19,7 @@ export default class Tag {
   tag = null
 
   /**
-   * @type {FetchedNodes}
+   * @type {Page}
    */
   fetchedObject = null
 
@@ -58,12 +58,12 @@ export default class Tag {
    *
    * @param   {String} maxId
    * @throws  {Error}
-   * @return  {FetchedNodes}
+   * @return  {Page}
    */
   async fetchPage(maxId = null) {
 
     // create page
-    const page = await createPage(this.instance)
+    const page = await createPhantomPage(this.instance)
 
     // open explore tag page
     const openPageStatus = await evaluate.openTagPage(page, this.tag, maxId)
@@ -78,7 +78,7 @@ export default class Tag {
     }
 
     // store current fetched object
-    this.fetchedObject = new FetchedNodes(json)
+    this.fetchedObject = new Page(json)
 
     return this.fetchedObject
   }

@@ -1,121 +1,199 @@
 # Instagram search hashtags
 
+## Why this package?
+
 The [API of instagram](https://www.instagram.com/developer/endpoints/tags/)
-limits search for hashtags by authorized user tags with a limit of 20 images.
+limits search for hashtags by authorized user tags onlyy with a limit of 20 images.
+The API also has a rate limit.
+
+Before we could easily fetch all tags with the endpoints `/explore/tags`.
+Instagram recently authorized these endpoints. Therefore it will not work for
+third party apps.
+
 
 Instead of using the API, this package scrapes data without any limits. It
 uses [phantomjs](http://phantomjs.org/) to get the data.
 
 
+## Install
+
+    $ npm install instagram-searchtags --save
+
 
 ## Usage
 
-### Login to instagram
+The examples in this documentation are written in ES6 with async/await.
+Node 6+ can handle async/await with the flag `harmony-async-await`.
+You can run the example codes in node as follow:
 
-To start using this package you need to login into instagram in order
-to search for hashtags, example:
+    $ DEBUG=instagramsearchtags node --harmony-async-await some-script.js
 
-    import InstagramSearchTags from 'instagram-searchtags'
+
+### Basic example: fetching 10 hashtag #dog nodes
+
+    const InstagramSearchTags = require('instagram-searchtags')
 
     const searchTags = new InstagramSearchTags({
       username: 'instagram-username-or-email',
       password: 'xxx',
     })
 
-    try {
-      const login = await searchTags.login()
-    } catch(err) {
-      console.error(`Oops an error occurred: ${err.message}`)
+    const exampleSearchTagNodes = async() => {
+      try {
+
+        // login to Instagram
+        const login = await searchTags.login()
+
+        // create tag #dog
+        const tag = searchTags.createTag('dog')
+
+        // fetch 10 latest post nodes of tag #dog
+        const nodes = await tag.fetchNodes(10)
+
+        // do something cool with these nodes...
+        console.log('Fetched nodes', nodes)
+
+        // close connection
+        await searchTags.close()
+
+      } catch (err) {
+
+        console.error(`Oops an error occurred: ${err.message}`)
+
+      }
     }
 
-
-### Creating tag instance
-
-The following code shows how to create an Tag object after you have logged in
-successfully:
-
-    ...
-
-    const dogTag = searchTag.createTag('dog')
-
-The following methods are available for this instance:
-
-#### `Tag::fetchPage`
-
-  > @parameter `maxId::String` This is optional. The `maxId` is the next page hash.
-
-  > @return    `Page::Object`
-
-Will fetch media object from first search page on instagram matching given
-tag name.
-
-#### `Tag::getTotalCount`
-
-  > @return `::Number`
-
-Will return the total count of tag nodes for matching tag
+    exampleSearchTagNodes()
 
 
-#### `Tag::hasNextPage`
 
-  > @return `::Boolean`
+Let's break it down in some basic steps:
 
-Get the state if last fetched Page object contains a next page
-
-#### `Tag::fetchNextPage`
-
-  > @return `Page::Object`
-
-Will fetch media object from next page
-
-#### `Tag::fetchNodes`
-
-  > @parameter `maxNodes::Number` Set the maximum amount of nodes
-
-  > @return `::Array`
-
-Will return an array of tag nodes.
+  1. Create an instance of `InstagramSearchTags` with your credentials
+  2. Login with these credentials with the method `login()`, this method returns a Promise.
+  3. After you've successfully logged in, you will be able to create tags with the method `createTag()`. This method returns a `Tag` instance.
+  4. With the `Tag` instance you can invoke several fetch methods, such as `fetchNodes()` which returns a Promise with the resolved nodes.
+  5. Close the PhantomJS connection with the `close()` method.
 
 
-### Page instance
+## Documentation
 
-A page instance is a dataset of a tag search. The following methods are available
-for this object:
+### `InstagramSearchTags` Class
 
-#### `Page::hasNextPage`
+The `InstagramSearchTags` Class is the main class to construct and destruct searching Instagram hashtags.
 
-  > @return `::Boolean`
+- <u>Create connection</u>:
 
-Get the state of current dataset if it has a next page
+        const searchTags = new InstagramSearchTags({
+          username: 'instagram-username-or-email',
+          password: 'xxx',
+        })
 
-#### `Page::getNextPageMaxId`
+- <u>Create `Tag` instance</u>:
 
-  > @return `::Boolean::String` false when no next page is found
+    Method structure _(pseudo code)_:
+    `InstagramSearchTags.createTag(:String): Tag`
 
-Get the `maxId` hash of the next page
+        const dogTag = searchTags.createTag('dog')
 
-#### `Page::getNodes`
+- <u>Close connection</u>:
 
-  > @return `::Array`
-
-Get media nodes from current dataset
-
-
-#### `Page::getTotalCount`
-
-  > @return `::Number`
-
-Get total nodes count of tag search
+        await searchTags.close()
 
 
-### Close connection
+### `Tag` Class
 
-The phantomjs instance needs to be closed when you are done searching
-media tags, example:
+The `Tag` Class is used to create tags and fetch data from it.
 
-    ...
+- <u>Fetching single page</u>:
 
-    await searchTags.close()
+      Method structure _(pseudo code)_:
+      `Tag.fetchPage(maxId:String): Promise::Page`
+
+      This method fetch a single page object including top_posts etc.
+      The parameter `maxId` is the hash for the page to fetch (this is optional).
+
+        const page = await tag.fetchPage()
+
+- <u>Fetching next page</u>:
+
+      Method structure _(pseudo code)_:
+      `Tag.fetchNextPage(): Promise::Page`
+
+      This method fetch the next page. Useful for manually iterate through pages.
+      Example:
+
+        const page = await tag.fetchPage()
+
+        if (page.hasNextPage()) {
+          const nextPage = await tag.fetchNextPage()
+        }
+
+
+- <u>Fetching nodes</u>:
+
+      Method structure _(pseudo code)_:
+      `Tag.fetchNodes(maxNodes:Number): Promise::Array`
+
+      This method fetch media nodes with a maximum.
+      Internal it uses `fetchPage` and `fetchNextPage` recursively till the nodes Array is constructed.
+
+        const nodes = await tag.fetchNodes(20)
+
+- <u>Get the total amount of media nodes found for given tag query.</u>:
+
+      Method structure _(pseudo code)_:
+      `Tag.getTotalCount(): Promise::Number`
+
+        const totalCount = await tag.getTotalCount()
+
+- <u>Get state if has next page</u>:
+
+      Method structure _(pseudo code)_:
+      `Tag.hasNextPage(): Boolean`
+
+
+        const hasNextPage = tag.hasNextPage()
+
+### `Page` Class
+
+The `Page` Class is generated by `Tag` instances. It provide an interface of fetching data.
+This class represent a single Instagram query `/explore/tags/${tag}?__a=1` entry.
+
+
+- <u>Get state if has next page</u>:
+
+      Method structure _(pseudo code)_:
+      `page.hasNextPage(): Boolean`
+
+        const hasNextPage = page.hasNextPage()
+
+- <u>Get next page hash (maxId)</u>:
+
+      Method structure _(pseudo code)_:
+      `page.getNextPageMaxId(): String|false`
+
+      Get the hash `maxId` for the next page. Returns false when there is no next page found.
+
+        const maxId = page.getNextPageMaxId()
+
+- <u>Get page nodes</u>:
+
+      Method structure _(pseudo code)_:
+      `page.getNodes(): Array`
+
+      Returns all media nodes of page
+
+        const nodes = page.getNodes()
+
+- <u>Get total result count of tag</u>:
+
+      Method structure _(pseudo code)_:
+      `page.getTotalCount(): Number`
+
+      The result of this method is the same as for `Tag.prototype.getTotalCount()`
+
+        const totalNodeCount = page.getTotalCount()
 
 
 
@@ -133,17 +211,12 @@ media tags, example:
 
       try {
 
-        // login to instagram
         const login = await searchTags.login()
 
-        // create 2 search tags
         const dogTag = searchTags.createTag('dog')
         const catTag = searchTags.createTag('cat')
 
-        // fetch 5 dog nodes from explore tag page
         const dogNodes = await dogTag.fetchNodes(5)
-
-        // fetch 20 cat nodes from explore tag page
         const catNodes = await catTag.fetchNodes(20)
 
         // output all display images with a caption to body

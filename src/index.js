@@ -1,1 +1,1 @@
-module.exports = require('./searchtags/App').default
+module.exports = require('./InstagramSearchTags').default
