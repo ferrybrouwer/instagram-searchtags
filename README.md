@@ -167,37 +167,37 @@ This class represent a single Instagram query `/explore/tags/${tag}?__a=1` entry
 
 - <u>Get state if has next page</u>:
 
-      Method structure _(pseudo code)_:<br />
-      `page.hasNextPage(): Boolean`
+	Method structure _(pseudo code)_:<br />
+	`page.hasNextPage(): Boolean`
 
-        const hasNextPage = page.hasNextPage()
+		const hasNextPage = page.hasNextPage()
 
 - <u>Get next page hash (maxId)</u>:
 
-      Method structure _(pseudo code)_:<br />
-      `page.getNextPageMaxId(): String|false`
+	Method structure _(pseudo code)_:<br />
+	`page.getNextPageMaxId(): String|false`
+	
+	*Get the hash `maxId` for the next page. Returns false when there is no next page found.*
 
-      *Get the hash `maxId` for the next page. Returns false when there is no next page found.*
-
-        const maxId = page.getNextPageMaxId()
+		const maxId = page.getNextPageMaxId()
 
 - <u>Get page nodes</u>:
 
-      Method structure _(pseudo code)_:<br />
-      `page.getNodes(): Array`
+	Method structure _(pseudo code)_:<br />
+	`page.getNodes(): Array`
+	
+	*Returns all media nodes of page*
 
-      *Returns all media nodes of page*
-
-        const nodes = page.getNodes()
+		const nodes = page.getNodes()
 
 - <u>Get total result count of tag</u>:
 
-      Method structure _(pseudo code)_:<br />
-      `page.getTotalCount(): Number`
+	Method structure _(pseudo code)_:<br />
+	`page.getTotalCount(): Number`
+	
+	*The result of this method is the same as for `Tag.prototype.getTotalCount()`*
 
-      *The result of this method is the same as for `Tag.prototype.getTotalCount()`*
-
-        const totalNodeCount = page.getTotalCount()
+		const totalNodeCount = page.getTotalCount()
 
 
 
