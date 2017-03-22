@@ -1,5 +1,11 @@
 # Instagram search hashtags
 
+[![npm version](https://badge.fury.io/js/instagram-searchtags.svg)](https://badge.fury.io/js/instagram-searchtags)
+[![GitHub release](https://img.shields.io/github/release/ferrybrouwer/instagram-searchtags.svg)](https://github.com/ferrybrouwer/instagram-searchtags)
+[![npm](https://img.shields.io/npm/dt/instagram-searchtags.svg)](https://www.npmjs.com/package/instagram-searchtags)
+
+
+
 ## Why this package?
 
 The [API of instagram](https://www.instagram.com/developer/endpoints/tags/)
