@@ -26,7 +26,12 @@ The examples in this documentation are written in ES6 with async/await.
 Node 6+ can handle async/await with the flag `harmony-async-await`.
 You can run the example codes in node as follow:
 
-    $ DEBUG=instagramsearchtags node --harmony-async-await some-script.js
+    $ node --harmony-async-await some-script.js
+    
+Add the environment variable `DEBUG=instagramsearchtags` to run with debug
+information in the console, example:
+
+	$ DEBUG=instagramsearchtags node --harmony-async-await some-script.js
 
 
 ### Basic example: fetching 10 hashtag #dog nodes
@@ -84,21 +89,21 @@ The `InstagramSearchTags` Class is the main class to construct and destruct sear
 
 - <u>Create connection</u>:
 
-        const searchTags = new InstagramSearchTags({
-          username: 'instagram-username-or-email',
-          password: 'xxx',
-        })
+		const searchTags = new InstagramSearchTags({
+		  username: 'instagram-username-or-email',
+		  password: 'xxx',
+		})
 
 - <u>Create `Tag` instance</u>:
 
-    Method structure _(pseudo code)_:
-    `InstagramSearchTags.createTag(:String): Tag`
-
-        const dogTag = searchTags.createTag('dog')
+	Method structure _(pseudo code)_:<br />
+	`InstagramSearchTags.createTag(:String): Tag`
+	
+		const dogTag = searchTags.createTag('dog')
 
 - <u>Close connection</u>:
 
-        await searchTags.close()
+		await searchTags.close()
 
 
 ### `Tag` Class
@@ -107,21 +112,20 @@ The `Tag` Class is used to create tags and fetch data from it.
 
 - <u>Fetching single page</u>:
 
-      Method structure _(pseudo code)_:
-      `Tag.fetchPage(maxId:String): Promise::Page`
+	Method structure _(pseudo code)_:<br />
+	`Tag.fetchPage(maxId:String): Promise::Page`
+	
+	*This method fetch a single page object including top_posts etc.<br />
+	The parameter `maxId` is the hash for the page to fetch (this is optional).*
 
-      This method fetch a single page object including top_posts etc.
-      The parameter `maxId` is the hash for the page to fetch (this is optional).
-
-        const page = await tag.fetchPage()
+		const page = await tag.fetchPage()
 
 - <u>Fetching next page</u>:
 
-      Method structure _(pseudo code)_:
-      `Tag.fetchNextPage(): Promise::Page`
-
-      This method fetch the next page. Useful for manually iterate through pages.
-      Example:
+	Method structure _(pseudo code)_:<br />
+	`Tag.fetchNextPage(): Promise::Page`
+	
+	*This method fetch the next page. Useful for manually iterate through pages*
 
         const page = await tag.fetchPage()
 
@@ -132,28 +136,28 @@ The `Tag` Class is used to create tags and fetch data from it.
 
 - <u>Fetching nodes</u>:
 
-      Method structure _(pseudo code)_:
-      `Tag.fetchNodes(maxNodes:Number): Promise::Array`
+	Method structure _(pseudo code)_:<br />
+	`Tag.fetchNodes(maxNodes:Number): Promise::Array`
+	
+	*This method fetch media nodes with a maximum.
+	Internal it uses `fetchPage` and `fetchNextPage` recursively till the nodes Array is constructed.*
 
-      This method fetch media nodes with a maximum.
-      Internal it uses `fetchPage` and `fetchNextPage` recursively till the nodes Array is constructed.
-
-        const nodes = await tag.fetchNodes(20)
+		const nodes = await tag.fetchNodes(20)
 
 - <u>Get the total amount of media nodes found for given tag query.</u>:
 
-      Method structure _(pseudo code)_:
-      `Tag.getTotalCount(): Promise::Number`
+	Method structure _(pseudo code)_:<br />
+	`Tag.getTotalCount(): Promise::Number`
 
-        const totalCount = await tag.getTotalCount()
+		const totalCount = await tag.getTotalCount()
 
 - <u>Get state if has next page</u>:
 
-      Method structure _(pseudo code)_:
-      `Tag.hasNextPage(): Boolean`
+	Method structure _(pseudo code)_:<br />
+	`Tag.hasNextPage(): Boolean`
 
-
-        const hasNextPage = tag.hasNextPage()
+		const hasNextPage = tag.hasNextPage()
+		
 
 ### `Page` Class
 
@@ -163,35 +167,35 @@ This class represent a single Instagram query `/explore/tags/${tag}?__a=1` entry
 
 - <u>Get state if has next page</u>:
 
-      Method structure _(pseudo code)_:
+      Method structure _(pseudo code)_:<br />
       `page.hasNextPage(): Boolean`
 
         const hasNextPage = page.hasNextPage()
 
 - <u>Get next page hash (maxId)</u>:
 
-      Method structure _(pseudo code)_:
+      Method structure _(pseudo code)_:<br />
       `page.getNextPageMaxId(): String|false`
 
-      Get the hash `maxId` for the next page. Returns false when there is no next page found.
+      *Get the hash `maxId` for the next page. Returns false when there is no next page found.*
 
         const maxId = page.getNextPageMaxId()
 
 - <u>Get page nodes</u>:
 
-      Method structure _(pseudo code)_:
+      Method structure _(pseudo code)_:<br />
       `page.getNodes(): Array`
 
-      Returns all media nodes of page
+      *Returns all media nodes of page*
 
         const nodes = page.getNodes()
 
 - <u>Get total result count of tag</u>:
 
-      Method structure _(pseudo code)_:
+      Method structure _(pseudo code)_:<br />
       `page.getTotalCount(): Number`
 
-      The result of this method is the same as for `Tag.prototype.getTotalCount()`
+      *The result of this method is the same as for `Tag.prototype.getTotalCount()`*
 
         const totalNodeCount = page.getTotalCount()
 
@@ -199,15 +203,14 @@ This class represent a single Instagram query `/explore/tags/${tag}?__a=1` entry
 
 ## An example fetching and displaying tag nodes as images
 
-    import InstagramSearchTags from 'instagram-searchtags'
+    const InstagramSearchTags = require('instagram-searchtags')
 
-    // create instance of InstagramSearchTags
     const searchTags = new InstagramSearchTags({
       username: 'instagram-username-or-email',
       password: 'xxx',
     })
-
-    (async() => {
+    
+    const exampleDisplayTagImages = async() => {
 
       try {
 
@@ -219,7 +222,6 @@ This class represent a single Instagram query `/explore/tags/${tag}?__a=1` entry
         const dogNodes = await dogTag.fetchNodes(5)
         const catNodes = await catTag.fetchNodes(20)
 
-        // output all display images with a caption to body
         dogNodes.concat(catNodes).forEach((node) => {
           const fragment = document.createDocumentFragment()
 
@@ -242,20 +244,21 @@ This class represent a single Instagram query `/explore/tags/${tag}?__a=1` entry
 
       await searchTags.close()
 
-    })();
+	}
+
+	exampleDisplayTagImages()
 
 
 ## An example of get total tag node count
 
-    import InstagramSearchTags from 'instagram-searchtags'
+    const InstagramSearchTags = require('instagram-searchtags')
 
-    // create instance of InstagramSearchTags
     const searchTags = new InstagramSearchTags({
       username: 'instagram-username-or-email',
       password: 'xxx',
     })
 
-    (async() => {
+    const exampleDispayTotalCount = async() => {
 
       try {
 
@@ -273,59 +276,55 @@ This class represent a single Instagram query `/explore/tags/${tag}?__a=1` entry
 
       await searchTags.close()
 
-    })();
+    }
+    
+    exampleDispayTotalCount()
+
 
 
 ## An example to manually iterate through pages
+	
+	const InstagramSearchTags = require('instagram-searchtags')
+	
+	const searchTags = new InstagramSearchTags({
+		username: 'instagram-username-or-email',
+		password: 'xxx',
+	})
+		
+	const exampleIteratePages = async() => {
+	
+		try {
+		
+		  const login = await searchTags.login()
+		
+		  const dogTag = searchTags.createTag('dog')
+		
+		  let dogPage = await dogTag.fetchPage()
+		
+		  console.log('dog tag count', dogPage.getTotalCount())
+		  console.log('dog tag nodes', dogPage.getNodes())
+		  console.log('page has next page', dogPage.hasNextPage())
+		
+		  if (dogPage.hasNextPage()) {
+		
+		    console.log('next page max id', dogPage.getNextPageMaxId())
+		
+		    dogPage = await dogTag.fetchNextPage()
+		
+		    console.log('dog tag count', dogPage.getTotalCount())
+		    console.log('dog tag nodes', dogPage.getNodes())
+		    console.log('page has next page', dogPage.hasNextPage())
+		  }
+		
+		} catch (err) {
+		
+		  console.error(`Oops an error occurred: ${err.message}`)
+		
+		}
+		
+		await searchTags.close()
+	
+	}
+		
+	exampleIteratePages()
 
-      import InstagramSearchTags from 'instagram-searchtags'
-
-      // create instance of InstagramSearchTags
-      const searchTags = new InstagramSearchTags({
-        username: 'instagram-username-or-email',
-        password: 'xxx',
-      })
-
-      (async() => {
-
-        try {
-
-          const login = await searchTags.login()
-
-          const dogTag = searchTags.createTag('dog')
-
-          // fetch the first page
-          let dogPage = await dogTag.fetchPage()
-
-          // display count and nodes
-          console.log('dog tag count', dogPage.getTotalCount())
-          console.log('dog tag nodes', dogPage.getNodes())
-          console.log('page has next page', dogPage.hasNextPage())
-
-          if (dogPage.hasNextPage()) {
-
-            // get the next page id (maxId)
-            console.log('next page max id', dogPage.getNextPageMaxId())
-
-            // fetch next page
-            dogPage = await dogTag.fetchNextPage()
-
-            // display count and nodes
-            console.log('dog tag count', dogPage.getTotalCount())
-            console.log('dog tag nodes', dogPage.getNodes())
-            console.log('page has next page', dogPage.hasNextPage())
-          }
-
-        } catch (err) {
-
-          console.error(`Oops an error occurred: ${err.message}`)
-
-        }
-
-        await searchTags.close()
-
-      })();
-
-
-Add the environment variable `DEBUG=instagramsearchtags` to run with debug
-information in the console.
