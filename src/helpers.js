@@ -1,3 +1,10 @@
+import request from 'request'
+import promisify from 'promisify-node'
+import debug from 'debug'
+
+const logger = debug('instagramsearchtags')
+const fs     = promisify('fs')
+
 /**
  * Evaluate with timeout
  *
@@ -32,4 +39,49 @@ export async function createPhantomPage(instance) {
   page.setting('loadImages', false)
 
   return page
+}
+
+/**
+ * Download file
+ *
+ * @param   {String} path
+ * @param   {String} url
+ * @return  {Promise.<void>}
+ */
+export const downloadFile = (path, url) => new Promise((resolve, reject) => {
+  const file = fs.createWriteStream(path)
+  const req  = request.get(url)
+  req.pipe(file)
+
+  const onError = (err) => {
+    file.close()
+    logger(`Error downloading image: ${err.message}`)
+    reject(err)
+  }
+
+  file.on('finish', () => {
+    file.close()
+    logger(`Successfull downloaded image ${path}`)
+    resolve()
+  })
+
+  file.on('error', onError)
+  req.on('error', onError)
+})
+
+/**
+ * Get state if given path is writable
+ *
+ * @param   {String} path
+ * @throws  {Error}
+ * @return  {Promise.<Boolean>}
+ */
+export async function isValidWritableDirectory(path) {
+  await fs.access(path, fs.W_OK)
+  const stat = await fs.stat(path)
+  if (!stat.isDirectory()) {
+    throw new Error(`${path} is not a directory!`)
+  }
+
+  return true
 }

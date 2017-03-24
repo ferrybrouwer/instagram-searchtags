@@ -85,7 +85,7 @@ class Tag {
    *
    * @param   {String} maxId
    * @throws  {Error}
-   * @return  {Page}
+   * @return  {Promise.<Page>}
    */
   fetchPage(maxId = null) {
     var _this2 = this;
@@ -117,7 +117,7 @@ class Tag {
   /**
    * Fetch nextPage
    *
-   * @return {Object|Array}
+   * @return {Promise.<Object|Array>}
    */
   fetchNextPage() {
     var _this3 = this;
@@ -140,7 +140,7 @@ class Tag {
    *
    * @param   {Number} maxNodes   Maximum number of nodes, default to 20
    * @throws  {Error}
-   * @return  {Array}
+   * @return  {Promise.<Array>}
    */
   fetchNodes(maxNodes = 20) {
     var _this4 = this;
@@ -175,6 +175,62 @@ class Tag {
       }
 
       return nodes;
+    })();
+  }
+
+  /**
+   * Download node thumbnail images
+   *
+   * @param   {String} the destination to output images
+   * @param   {Number} maxNodes Maximum number of nodes, default to 20
+   * @throws  {Error}
+   * @return  {Promise.<void>}
+   */
+  downloadNodeThumbnailImages(destinationDirectory, maxNodes = 20) {
+    var _this5 = this;
+
+    return _asyncToGenerator(function* () {
+      logger(`downloading ${maxNodes || 20} node thumbnail images to ${destinationDirectory}`);
+
+      // validate if destination directory exists
+      yield (0, _helpers.isValidWritableDirectory)(destinationDirectory);
+
+      // get array with node promises
+      const promises = (yield _this5.fetchNodes(maxNodes)).map(function (node) {
+        const { 1: name } = node.thumbnail_src.match(/([^\/]+)$/);
+        return (0, _helpers.downloadFile)(`${destinationDirectory}/${name}`, node.thumbnail_src);
+      });
+
+      // resolve promises
+      yield Promise.all(promises);
+    })();
+  }
+
+  /**
+   * Download node display images
+   *
+   * @param   {String} the destination to output images
+   * @param   {Number} maxNodes
+   * @throws  {Error}
+   * @return  {Promise.<void>}
+   */
+  downloadNodeDisplayImages(destinationDirectory, maxNodes = 20) {
+    var _this6 = this;
+
+    return _asyncToGenerator(function* () {
+      logger(`downloading ${maxNodes || 20} node display images to ${destinationDirectory}`);
+
+      // validate if destination directory exists
+      yield (0, _helpers.isValidWritableDirectory)(destinationDirectory);
+
+      // get array with node promises
+      const promises = (yield _this6.fetchNodes(maxNodes)).map(function (node) {
+        const { 1: name } = node.display_src.match(/([^\/]+)$/);
+        return (0, _helpers.downloadFile)(`${destinationDirectory}/${name}`, node.display_src);
+      });
+
+      // resolve promises
+      yield Promise.all(promises);
     })();
   }
 }

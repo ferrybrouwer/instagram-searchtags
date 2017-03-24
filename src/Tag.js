@@ -1,5 +1,5 @@
 import debug from 'debug'
-import {createPhantomPage} from './helpers'
+import {createPhantomPage, downloadFile, isValidWritableDirectory} from './helpers'
 import evaluate from './evaluate'
 import Page from './Page'
 
@@ -58,7 +58,7 @@ export default class Tag {
    *
    * @param   {String} maxId
    * @throws  {Error}
-   * @return  {Page}
+   * @return  {Promise.<Page>}
    */
   async fetchPage(maxId = null) {
 
@@ -86,7 +86,7 @@ export default class Tag {
   /**
    * Fetch nextPage
    *
-   * @return {Object|Array}
+   * @return {Promise.<Object|Array>}
    */
   async fetchNextPage() {
     if (typeof this.fetchedObject !== 'object') {
@@ -105,7 +105,7 @@ export default class Tag {
    *
    * @param   {Number} maxNodes   Maximum number of nodes, default to 20
    * @throws  {Error}
-   * @return  {Array}
+   * @return  {Promise.<Array>}
    */
   async fetchNodes(maxNodes = 20) {
     let nodes                = []
@@ -137,5 +137,53 @@ export default class Tag {
     }
 
     return nodes
+  }
+
+  /**
+   * Download node thumbnail images
+   *
+   * @param   {String} the destination to output images
+   * @param   {Number} maxNodes Maximum number of nodes, default to 20
+   * @throws  {Error}
+   * @return  {Promise.<void>}
+   */
+  async downloadNodeThumbnailImages(destinationDirectory, maxNodes = 20) {
+    logger(`downloading ${maxNodes || 20} node thumbnail images to ${destinationDirectory}...`)
+
+    // validate if destination directory exists
+    await isValidWritableDirectory(destinationDirectory)
+
+    // get array with node promises
+    const promises = (await this.fetchNodes(maxNodes)).map((node) => {
+      const {1:name} = node.thumbnail_src.match(/([^\/]+)$/)
+      return downloadFile(`${destinationDirectory}/${name}`, node.thumbnail_src)
+    })
+
+    // resolve promises
+    await Promise.all(promises)
+  }
+
+  /**
+   * Download node display images
+   *
+   * @param   {String} the destination to output images
+   * @param   {Number} maxNodes
+   * @throws  {Error}
+   * @return  {Promise.<void>}
+   */
+  async downloadNodeDisplayImages(destinationDirectory, maxNodes = 20) {
+    logger(`downloading ${maxNodes || 20} node display images to ${destinationDirectory}...`)
+
+    // validate if destination directory exists
+    await isValidWritableDirectory(destinationDirectory)
+
+    // get array with node promises
+    const promises = (await this.fetchNodes(maxNodes)).map((node) => {
+      const {1:name} = node.display_src.match(/([^\/]+)$/)
+      return downloadFile(`${destinationDirectory}/${name}`, node.display_src)
+    })
+
+    // resolve promises
+    await Promise.all(promises)
   }
 }
