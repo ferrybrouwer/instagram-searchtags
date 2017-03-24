@@ -190,7 +190,7 @@ class Tag {
     var _this5 = this;
 
     return _asyncToGenerator(function* () {
-      logger(`downloading ${maxNodes || 20} node thumbnail images to ${destinationDirectory}`);
+      logger(`downloading ${maxNodes || 20} node thumbnail images to ${destinationDirectory}...`);
 
       // validate if destination directory exists
       yield (0, _helpers.isValidWritableDirectory)(destinationDirectory);
@@ -218,7 +218,7 @@ class Tag {
     var _this6 = this;
 
     return _asyncToGenerator(function* () {
-      logger(`downloading ${maxNodes || 20} node display images to ${destinationDirectory}`);
+      logger(`downloading ${maxNodes || 20} node display images to ${destinationDirectory}...`);
 
       // validate if destination directory exists
       yield (0, _helpers.isValidWritableDirectory)(destinationDirectory);

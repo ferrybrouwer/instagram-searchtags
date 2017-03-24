@@ -77,9 +77,9 @@ searchTags.login()
 
 ### See other examples:
 
-- [Fetching nodes](examples/fetch-nodes.md)
-- [Manually iterate through pages](examples/manually-iterate-pages.md)
-- [Download latest images](examples/download-images.md)
+- [Fetching nodes](https://github.com/ferrybrouwer/instagram-searchtags/blob/2.0.0/examples/fetch-nodes.md)
+- [Manually iterate through pages](https://github.com/ferrybrouwer/instagram-searchtags/blob/2.0.0/examples/manually-iterate-pages.md)
+- [Download latest images](https://github.com/ferrybrouwer/instagram-searchtags/blob/2.0.0/examples/download-images.md)
 
 <u>Let's break it down in some basic steps</u>:
 
@@ -171,7 +171,7 @@ The `Tag` Class is used to create tags and fetch data from it.
 	Method structure _(pseudo code)_:<br />
 	`Tag.downloadNodeThumbnailImages(destinationDirectory:String, maxNodes:Number): Promise.<void>`
 
-	*This method fetch media nodes with a maximum if `maxNodes` and download image to `destinationDirectory`. It uses the property `thumbnail_src` from a single node.*
+	*This method fetch media nodes with a maximum `maxNodes` and download image to `destinationDirectory`. It uses the property `thumbnail_src` from a single node.*
 
 	```javascript
 	const nodes = await tag.downloadNodeThumbnailImages('./images', 20)
@@ -182,7 +182,7 @@ The `Tag` Class is used to create tags and fetch data from it.
 	Method structure _(pseudo code)_:<br />
 	`Tag.downloadNodeDisplayImages(destinationDirectory:String, maxNodes:Number): Promise.<void>`
 
-	*This method fetch media nodes with a maximum if `maxNodes` and download image to `destinationDirectory`. It uses the property `display_src` from a single node.*
+	*This method fetch media nodes with a maximum `maxNodes` and download image to `destinationDirectory`. It uses the property `display_src` from a single node.*
 
 	```javascript
 	const nodes = await tag.downloadNodeDisplayImages('./images', 20)
