@@ -71,10 +71,16 @@ searchTags.login()
 
     // ... do something cool with nodes
 
+    // close connection
+    searchTags.close()
+
   })
   .catch((err) => {
 
     console.error(`Error: ${err.message}`)
+
+    // close connection
+    searchTags.close()
 
   })
 ```

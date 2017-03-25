@@ -45,7 +45,7 @@ const evaluate = {
     return _asyncToGenerator(function* () {
       let url = `https://www.instagram.com/explore/tags/${tag}/?__a=1`;
       if (typeof maxId === 'string' && maxId.length > 0) {
-        url += `&maxId=${maxId}`;
+        url += `&max_id=${maxId}`;
       }
       const evaluate = function () {
         var _ref2 = _asyncToGenerator(function* () {

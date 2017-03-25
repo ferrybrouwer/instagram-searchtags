@@ -91,7 +91,6 @@ class Tag {
     var _this2 = this;
 
     return _asyncToGenerator(function* () {
-
       // create page
       const page = yield (0, _helpers.createPhantomPage)(_this2.instance);
 
@@ -131,7 +130,7 @@ class Tag {
         throw new Error(`There is no next page found`);
       }
 
-      return yield _this3.fetch(_this3.fetchedObject.getNextPageMaxId());
+      return yield _this3.fetchPage(_this3.fetchedObject.getNextPageMaxId());
     })();
   }
 

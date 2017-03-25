@@ -95,13 +95,21 @@ searchTags.login()
 
   })
   .then((page) => {
+
     console.log('dog tag count', page.getTotalCount())
     console.log('dog tag nodes', page.getNodes())
     console.log('page has next page', page.hasNextPage())
+
+    // close connection
+    searchTags.close()
+    
   })
   .catch((err) => {
 
     console.error(`Error: ${err.message}`)
+
+    // close connection
+    searchTags.close()
 
   })
 ```

@@ -43,7 +43,9 @@ export default class FetchedNodes {
    * @return {boolean}
    */
   hasNextPage() {
-    return this.pageInfo.has_next_page
+    return this.pageInfo.has_next_page && 
+      typeof this.pageInfo.end_cursor === 'string' && 
+      this.pageInfo.end_cursor.length > 0
   }
 
   /**

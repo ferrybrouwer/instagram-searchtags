@@ -61,7 +61,6 @@ export default class Tag {
    * @return  {Promise.<Page>}
    */
   async fetchPage(maxId = null) {
-
     // create page
     const page = await createPhantomPage(this.instance)
 
@@ -97,7 +96,7 @@ export default class Tag {
       throw new Error(`There is no next page found`)
     }
 
-    return await this.fetch(this.fetchedObject.getNextPageMaxId())
+    return await this.fetchPage(this.fetchedObject.getNextPageMaxId())
   }
 
   /**

@@ -65,7 +65,16 @@ searchTags.login()
     return tag.downloadNodeDisplayImages('./images', 10)
 
   })
+  .then(() => {
+
+    // close connection
+    return searchTags.close()
+
+  })
   .catch((err) => {
+
+    // close connection
+    searchTags.close()
 
     console.error(`Error: ${err.message}`)
 

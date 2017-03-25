@@ -25,7 +25,7 @@ const evaluate = {
   async openTagPage(page, tag, maxId = null) {
     let url = `https://www.instagram.com/explore/tags/${tag}/?__a=1`
     if (typeof maxId === 'string' && maxId.length > 0) {
-      url += `&maxId=${maxId}`
+      url += `&max_id=${maxId}`
     }
     const evaluate = async() => await page.open(url)
     return await evaluateWithTimeout(evaluate, (value) => (value === 'success'))
