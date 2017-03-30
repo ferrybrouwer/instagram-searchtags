@@ -93,6 +93,7 @@ export default class App {
   async close() {
     if (this._phantomInstance) {
       await this._phantomInstance.exit()
+      this._phantomInstance = null
     }
   }
 }
